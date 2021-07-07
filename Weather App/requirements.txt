@@ -1,0 +1,4 @@
+requests==2.25.1
+mysql-connector-python==8.0.24
+mariadb==1.0.6
+	
