@@ -186,7 +186,7 @@ class MyWeatherApp():
               ).pack(expand=False)
 
         Label(self.new_window2,
-              text="Spring 2021-1400 / version 1.9.1.1",
+              text="Spring 2021-1400 / version 1.9.2.1",
               font=("italic", 10),
               fg="white", bg='#15317E',
               height=3, width=55,bd=2,
