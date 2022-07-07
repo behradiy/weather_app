@@ -138,11 +138,12 @@ class MyWeatherApp():
     def openNewWindow(self):
         self.new_window = Toplevel(self.window)
         self.new_window.title("Search History")
-        self.new_window.geometry("500x500+100+150")
+        self.new_window.geometry("600x600+100+150")
         self.new_window.configure(bg="white", padx=10, pady=10)
         self.new_window.resizable(False, False)
         self.text = StringVar()
         result_list = funcs.Show_search_history()
+        print(result_list)
         s = ''
         for x in result_list:
             s += (x)
