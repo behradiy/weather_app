@@ -176,10 +176,9 @@ class MyWeatherApp():
 
         Label(self.new_window2,
               text="Miracle Team Members:\n"
-                   "   1- Samira Amir Navidi\n"
-                   "   2- Behrad Azimi\n"
-                   "   3- Amir Norani\n"
-                   "   4- Komeil Osali",
+                   "   1- Behrad Azimi (GitHub ID: behradiy)\n"
+                   "   2- Amir Norani (GitHub ID: LogicalErr)\n"
+                   "   3- Komeil Osali (GitHub ID: komeilosali)",
               font=("mincho", 13),
               fg="white", bg='#15317E',
               height=8, width=45,
