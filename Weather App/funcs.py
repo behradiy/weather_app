@@ -1,11 +1,10 @@
 from datetime import datetime
-import mysql.connector
 from configparser import ConfigParser
+import sqlite3
 
 config_file= 'config.ini'
 config= ConfigParser()
 config.read(config_file)
-
 
 def utc_con(offset):
     l = str(datetime.utcnow())
@@ -41,60 +40,40 @@ def utc_con(offset):
 
     return (final.format(NewHour, NewMinu, NewSecond))
 
+
+
+
 def Data_Base(list):
-    
-    cnx= mysql.connector.connect(user = config['db']['user'],
-                                password = config['db']['pass'],
-                                port = config['db']['port'],
-                                host = config['db']['host'],
-                                database = config['db']['dbname']) 
-                            
-    cursor = cnx.cursor()
-
-    cursor.execute('INSERT INTO {} VALUES(\'{}\', \'{}\', \'{}°C\' ,\'{}°F\', \'{}\', \'{}\')'.format(config['db']['tbname'],
-                                                                                                        list[0],
-                                                                                                        list[1],
-                                                                                                        int(list[2]),
-                                                                                                        int(list[3]),
-                                                                                                        list[4],
-                                                                                                        utc_con(list[5])))
-
+    conn = sqlite3.connect('WEATHER.db')
+    conn.execute(f"INSERT INTO history_search VALUES ('{list[0]}', '{list[1]}', {round(list[2], 2)}, {round(list[3], 2)}, '{list[4]}', '{utc_con(list[5])}');")
     print("--- Data was successfully deployed to DataBase. ---")
-
-    cnx.commit()
-    cursor.close()
-    cnx.close()
+    conn.commit()
+    conn.close()
 
 def Show_search_history():
     list = []
-    cnx = mysql.connector.connect(user = config['db']['user'],
-                                password = config['db']['pass'],
-                                port = config['db']['port'],
-                                host = config['db']['host'],
-                                database = config['db']['dbname'])
+    conn = sqlite3.connect('WEATHER.db')
+    cursor = conn.execute("SELECT city, country, temp_celcius, temp_fahrenheit, weather, time FROM history_search;")
+    rows = cursor.fetchall()
+    for row in rows:
+        print('city = ', row[0], end=" ")
+        print('country = ', row[1], end=" ")
+        print('temp_celcius = ', row[2], end=" ")
+        print('temp_fahrenheit = ', row[3], end=" ")
+        print('weather = ', row[4], end=" ")
+        print('time = ', row[5], end=" ")
+        list.append("{}\n".format(row))
 
-    cursor = cnx.cursor()
-    cursor.execute('SELECT * FROM weather;')
-    for x in cursor.fetchall():
-        list.append("{}\n".format(x))
-        print(x)
-        print('\n')
-
-    cnx.commit()
-    cursor.close()
-    cnx.close()
+    conn.commit()
+    conn.close()
     return list
 
+
+
+
 def Erase_data():
-    cnx = mysql.connector.connect(user = config['db']['user'],
-                                password = config['db']['pass'],
-                                port = config['db']['port'],
-                                host = config['db']['host'],
-                                database = config['db']['dbname'])  
-                                
-    cursor = cnx.cursor()
-    cursor.execute('DELETE FROM weather;')
-    cnx.commit()
-    cursor.close()
-    cnx.close()
+    conn = sqlite3.connect('WEATHER.db')
+    conn.execute('DELETE FROM history_search;')
+    conn.commit()
+    conn.close()
     print("--- Deta Erased Successfully! ---\n")
